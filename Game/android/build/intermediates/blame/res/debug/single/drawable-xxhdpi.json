@@ -2,5 +2,9 @@
     {
         "merged": "/Users/roncon/Documents/Github/SlingMango/android/build/intermediates/res/merged/debug/drawable-xxhdpi/ic_launcher.png",
         "source": "/Users/roncon/Documents/Github/SlingMango/android/res/drawable-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/roncon/Documents/Github/SlingMango/Game/android/build/intermediates/res/merged/debug/drawable-xxhdpi/ic_launcher.png",
+        "source": "/Users/roncon/Documents/Github/SlingMango/Game/android/res/drawable-xxhdpi/ic_launcher.png"
     }
 ]
