@@ -28,6 +28,8 @@ public class Fruit extends Sprite
     {
         super(texture);
 
+        setScale(0.01f);
+
         // First we create a body definition
         BodyDef bodyDef = new BodyDef();
         // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
@@ -40,7 +42,7 @@ public class Fruit extends Sprite
 
         // Create a circle shape and set its radius to 6
         CircleShape circle = new CircleShape();
-        circle.setRadius(0.7f);
+        circle.setRadius(0.07f);
 
         // Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();

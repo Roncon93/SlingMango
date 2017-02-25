@@ -16,6 +16,8 @@
 
 package com.badman.slingmango.data;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -32,6 +34,8 @@ import com.badlogic.gdx.physics.box2d.World;
 public class ConveyorBelt2 extends Box2DTest implements ContactListener
 {
 	Fixture m_platform;
+
+	Texture texture;
 
 	@Override
 	protected void createWorld (World world) {
@@ -77,6 +81,8 @@ public class ConveyorBelt2 extends Box2DTest implements ContactListener
 			Mango mango = new Mango(world);
 			mango.body.setTransform(-10.0f + 2.0f * i, 7.0f, 0);
 		}
+
+		texture = new Texture(Gdx.files.internal("basket.png"));
 	}
 
 	public void preSolve (Contact contact, Manifold oldManifold) {
@@ -99,5 +105,14 @@ public class ConveyorBelt2 extends Box2DTest implements ContactListener
 
 	@Override
 	public void postSolve (Contact contact, ContactImpulse impulse) {
+	}
+
+	@Override
+	public void render() {
+		super.render();
+
+		batch.begin();
+		batch.draw(texture, 0, 0);
+		batch.end();
 	}
 }
