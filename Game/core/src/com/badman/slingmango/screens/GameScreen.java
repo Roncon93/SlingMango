@@ -245,7 +245,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         Body basketTrigger2 = world.createBody(bd4);
 
         EdgeShape shape4 = new EdgeShape();
-        shape4.set(new Vector2(-0.2f, 0.6f), new Vector2(0.2f, 0.6f));
+        shape4.set(new Vector2(-0.15f, 0.6f), new Vector2(0.15f, 0.6f));
         basketSensor = basketTrigger2.createFixture(shape4, 0.0f);
         basketSensor.setSensor(true);
 
