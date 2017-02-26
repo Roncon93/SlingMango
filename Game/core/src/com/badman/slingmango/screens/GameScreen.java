@@ -359,7 +359,9 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             {
                 fruit.body.setLinearVelocity(Vector2.Zero);
                 fruit.body.setAngularVelocity(0);
+                fruit.body.setFixedRotation(false);
                 fruit.body.applyForceToCenter(velocityX / 1000, 11, true);
+                fruit.body.applyTorque(0.1f, true);
                 fruit.slinged = true;
             }
         }

@@ -57,6 +57,7 @@ public class Fruit extends Box2DSprite
         circle.dispose();
 
         body.setUserData(this);
+        body.setFixedRotation(true);
 
         touchedDown = false;
         slinged = false;
