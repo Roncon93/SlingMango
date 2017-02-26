@@ -1,8 +1,6 @@
 package com.badman.slingmango.data;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -10,11 +8,13 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+
 /**
  * Created by roncon on 2/25/17.
  */
 
-public class Fruit extends Sprite
+public class Fruit extends Box2DSprite
 {
     public Body body;
 
@@ -27,8 +27,6 @@ public class Fruit extends Sprite
     public Fruit(Texture texture, World world)
     {
         super(texture);
-
-        setScale(0.01f);
 
         // First we create a body definition
         BodyDef bodyDef = new BodyDef();
@@ -49,7 +47,7 @@ public class Fruit extends Sprite
         fixtureDef.shape = circle;
         fixtureDef.density = 2.5f;
         fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.1f; // Make it bounce a little bit
+        fixtureDef.restitution = 0.4f; // Make it bounce a little bit
 
         // Create our fixture and attach it to the body
         Fixture fixture = body.createFixture(fixtureDef);
@@ -63,14 +61,5 @@ public class Fruit extends Sprite
         touchedDown = false;
         slinged = false;
         falling = false;
-    }
-
-    @Override
-    public void draw(Batch batch)
-    {
-        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-        setRotation(body.getAngle());
-
-        super.draw(batch);
     }
 }

@@ -29,6 +29,8 @@ import com.badman.slingmango.data.Fruit;
 import com.badman.slingmango.data.Mango;
 import com.badman.slingmango.main.SlingMango;
 
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+
 /**
  * Created by roncon on 2/24/17.
  */
@@ -45,11 +47,12 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
     private World world;
 
-    private Body groundBody;
-
     private Array<Fruit> fruits = new Array<Fruit>();
 
-    private Sprite basketSprite;
+    private Box2DSprite basketSprite;
+    private Sprite mangoSprite;
+
+    private Body basketBody;
 
     private Fixture conveyorBelt;
     private Fixture basketSensor;
@@ -73,9 +76,18 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         renderer.render(world, camera.combined);
         float renderTime = (TimeUtils.nanoTime() - startTime) / 1000000000.0f;
 
+        batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
         font.draw(batch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
-        basketSprite.draw(batch);
+        basketSprite.draw(batch, basketBody);
+
+        for (Fruit fruit : fruits) {
+            //mangoSprite.setPosition(fruit.body.getPosition().x, fruit.body.getPosition().y);
+            //mangoSprite.draw(batch);
+            fruit.draw(batch, fruit.body);
+        }
+
         batch.end();
     }
 
@@ -97,20 +109,19 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         // create the world
         world = new World(new Vector2(0, -5), true);
 
-        // we also need an invisible zero size ground body
-        // to which we can connect the mouse joint
-        BodyDef bodyDef = new BodyDef();
-        groundBody = world.createBody(bodyDef);
-
         // call abstract method to populate the world
         createWorld(world);
 
         batch = new SpriteBatch();
         font = new BitmapFont();
 
-        basketSprite = new Sprite(new Texture(Gdx.files.internal("basket.png")));
-        basketSprite.setScale(0.5f);
-        basketSprite.setPosition(235, 335);
+        //basketSprite = new Sprite(new Texture(Gdx.files.internal("basket.png")));
+        //basketSprite.setScale(0.5f);
+        //basketSprite.setPosition(235, 335);
+
+        mangoSprite = new Sprite(new Texture(Gdx.files.internal("mango.png")));
+        mangoSprite.setScale(0.25f);
+        mangoSprite.setPosition(235, 335);
 
         Gdx.input.setInputProcessor(new GestureDetector(this));
     }
@@ -167,7 +178,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         fd.friction = 0.8f;
         conveyorBelt = body.createFixture(fd);
 
-        // Basket
+        // Basket Rim
         BodyDef bd2 = new BodyDef();
         bd2.position.set(-0.12f, 0.8f);
         Body body2 = world.createBody(bd2);
@@ -191,6 +202,21 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         shape3.set(new Vector2(-20.0f, 1.2f), new Vector2(20.0f, 1.2f));
         basketSensor = basketTrigger.createFixture(shape3, 0.0f);
         basketSensor.setSensor(true);
+
+        // Hoop Sprite
+        BodyDef bd3 = new BodyDef();
+        bd3.position.set(0f, 0.7f);
+        basketBody = world.createBody(bd3);
+
+        PolygonShape shape4 = new PolygonShape();
+        shape.setAsBox(0.15f, 0.15f);
+
+        FixtureDef fd3 = new FixtureDef();
+        fd3.shape = shape;
+        fd3.isSensor = true;
+        basketBody.createFixture(fd3);
+
+        basketSprite = new Box2DSprite(new Texture(Gdx.files.internal("basket.png")));
 
         // Boxes
         for (int i = 0; i < 5; ++i)
@@ -332,6 +358,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             if (fruit.touchedDown && !fruit.slinged)
             {
                 fruit.body.setLinearVelocity(Vector2.Zero);
+                fruit.body.setAngularVelocity(0);
                 fruit.body.applyForceToCenter(velocityX / 1000, 11, true);
                 fruit.slinged = true;
             }
