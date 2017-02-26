@@ -65,7 +65,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
     private Box2DSprite basketBackgroundSprite;
     private Box2DSprite basketForegroundSprite;
-    private Sprite mangoSprite;
+    private Sprite shredderSprite;
 
     private Body basketBody;
 
@@ -84,16 +84,16 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         // update the world with a fixed time step
         long startTime = TimeUtils.nanoTime();
         world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
-        float updateTime = (TimeUtils.nanoTime() - startTime) / 1000000000.0f;
+        //float updateTime = (TimeUtils.nanoTime() - startTime) / 1000000000.0f;
 
-        startTime = TimeUtils.nanoTime();
+        //startTime = TimeUtils.nanoTime();
         // clear the screen and setup the projection matrix
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
 
         // render the world using the debug renderer
-        renderer.render(world, camera.combined);
-        float renderTime = (TimeUtils.nanoTime() - startTime) / 1000000000.0f;
+        //renderer.render(world, camera.combined);
+        //float renderTime = (TimeUtils.nanoTime() - startTime) / 1000000000.0f;
 
         batch.setProjectionMatrix(camera.combined);
 
@@ -119,7 +119,13 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
         textBatch.begin();
 
-        font.draw(textBatch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
+        shredderSprite.setPosition(-480, -100);
+        shredderSprite.draw(textBatch);
+
+        shredderSprite.setPosition(-150, -100);
+        shredderSprite.draw(textBatch);
+
+        //font.draw(textBatch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
         font.draw(textBatch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
         font.draw(textBatch, "Lives:", Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 20);
 
@@ -160,9 +166,8 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
         font = new BitmapFont();
 
-        mangoSprite = new Sprite(new Texture(Gdx.files.internal("mango.png")));
-        mangoSprite.setScale(0.25f);
-        mangoSprite.setPosition(235, 335);
+        shredderSprite = new Sprite(new Texture(Gdx.files.internal("sawFull.png")));
+        shredderSprite.setScale(0.25f);
 
         score = 0;
         lives = 3;
