@@ -65,8 +65,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
     private Box2DSprite basketBackgroundSprite;
     private Box2DSprite basketForegroundSprite;
+    private Box2DSprite beltSprite;
     private Sprite shredderSprite;
 
+    private Body beltBody;
     private Body basketBody;
 
     private Fixture conveyorBelt;
@@ -94,6 +96,13 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         // render the world using the debug renderer
         //renderer.render(world, camera.combined);
         //float renderTime = (TimeUtils.nanoTime() - startTime) / 1000000000.0f;
+
+        textBatch.begin();
+
+        beltSprite.setPosition(440, 80);
+        beltSprite.draw(textBatch);
+
+        textBatch.end();
 
         batch.setProjectionMatrix(camera.combined);
 
@@ -166,6 +175,8 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
         font = new BitmapFont();
 
+        beltSprite = new Box2DSprite(new Texture(Gdx.files.internal("belt.png")));
+
         shredderSprite = new Sprite(new Texture(Gdx.files.internal("sawFull.png")));
         shredderSprite.setScale(0.25f);
 
@@ -221,7 +232,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         // Conveyor Belt
         BodyDef bd = new BodyDef();
         bd.position.set(10.4f, -0.5f);
-        Body body = world.createBody(bd);
+        beltBody = world.createBody(bd);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(10.0f, 0.1f);
@@ -229,7 +240,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         FixtureDef fd = new FixtureDef();
         fd.shape = shape;
         fd.friction = 0.8f;
-        conveyorBelt = body.createFixture(fd);
+        conveyorBelt = beltBody.createFixture(fd);
 
         // Basket Rim
         BodyDef bd2 = new BodyDef();
