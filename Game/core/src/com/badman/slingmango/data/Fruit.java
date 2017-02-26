@@ -24,6 +24,8 @@ public class Fruit extends Box2DSprite
 
     public boolean falling;
 
+    public boolean scored;
+
     public Fruit(Texture texture, World world)
     {
         super(texture);

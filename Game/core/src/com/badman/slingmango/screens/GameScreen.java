@@ -25,15 +25,11 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-<<<<<<< HEAD
 import com.badlogic.gdx.utils.Timer;
 import com.badman.slingmango.MainMenu;
-=======
->>>>>>> Badman
 import com.badman.slingmango.SlingName;
 import com.badman.slingmango.data.Fruit;
 import com.badman.slingmango.data.Mango;
-import com.badman.slingmango.main.SlingMango;
 
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -43,7 +39,7 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 public class GameScreen implements Screen, GestureDetector.GestureListener, ContactListener
 {
-    private SlingMango game;
+    private SlingName game;
 
     private OrthographicCamera camera;
 
@@ -300,7 +296,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                game.setScreen(new MainMenu(new SlingName()));
+                game.setScreen(new MainMenu(game));
             }
         }, 3);
     }
@@ -377,7 +373,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             Fruit fruit = (Fruit) fixtureB.getBody().getUserData();
 
             if (fruit.falling)
+            {
+                fruit.scored = true;
                 score++;
+            }
         }
 
         else if (fixtureB == basketSensor)
@@ -385,7 +384,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             Fruit fruit = (Fruit) fixtureA.getBody().getUserData();
 
             if (fruit.falling)
+            {
+                fruit.scored = true;
                 score++;
+            }
         }
 
         else if (fixtureA == shredderSensor)
@@ -394,8 +396,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             fruit.getTexture().dispose();
             fruits.removeValue(fruit, false);
 
-            if (--lives <= 0)
-                showGameOver();
+            if (!fruit.scored) {
+                if (--lives <= 0)
+                    showGameOver();
+            }
         }
 
         else if (fixtureB == shredderSensor)
@@ -404,8 +408,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             fruit.getTexture().dispose();
             fruits.removeValue(fruit, false);
 
-            if (--lives <= 0)
-                showGameOver();
+            if (!fruit.scored) {
+                if (--lives <= 0)
+                    showGameOver();
+            }
         }
     }
 
