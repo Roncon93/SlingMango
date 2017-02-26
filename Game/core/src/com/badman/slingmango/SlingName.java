@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badman.slingmango.screens.GameScreen;
 
 public class SlingName extends Game {
 	SpriteBatch batch;
@@ -15,7 +14,7 @@ public class SlingName extends Game {
 
 		batch = new SpriteBatch();
 		img = new Texture("BadMan.png");
-		this.setScreen(new GameScreen(this));
+		this.setScreen(new SplashScreen(this));
 	}
 
 	@Override
