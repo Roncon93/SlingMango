@@ -7,6 +7,11 @@ import com.badman.slingmango.main.SlingMango;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+<<<<<<< HEAD
 		new LwjglApplication(new SlingMango(), config);
+=======
+		config.title = "SlingMango";
+		new LwjglApplication(new SlingName(), config);
+>>>>>>> Badman
 	}
 }

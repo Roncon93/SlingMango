@@ -1,6 +1,10 @@
 [
     {
+<<<<<<< HEAD
         "outputFile": "C:\\Users\\roncon\\Documents\\Github\\SlingMango\\android\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+=======
+        "outputFile": "C:\\Users\\kaija\\OneDrive\\Documents\\GitHub\\SlingMango\\Game\\android\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+>>>>>>> Badman
         "map": [
             {
                 "to": {
@@ -11,13 +15,17 @@
                     "endOffset": 98
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\roncon\\Documents\\Github\\SlingMango\\android\\res\\values\\strings.xml",
+=======
+                    "file": "C:\\Users\\kaija\\OneDrive\\Documents\\GitHub\\SlingMango\\Game\\android\\res\\values\\strings.xml",
+>>>>>>> Badman
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
-                        "startOffset": 56,
+                        "startOffset": 59,
                         "endColumn": 47,
-                        "endOffset": 99
+                        "endOffset": 102
                     }
                 }
             },
@@ -31,13 +39,18 @@
                     "endOffset": 561
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\roncon\\Documents\\Github\\SlingMango\\android\\res\\values\\styles.xml",
+=======
+                    "file": "C:\\Users\\kaija\\OneDrive\\Documents\\GitHub\\SlingMango\\Game\\android\\res\\values\\styles.xml",
+>>>>>>> Badman
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
-                        "startOffset": 17,
+                        "startOffset": 19,
                         "endLine": 9,
                         "endColumn": 12,
+<<<<<<< HEAD
                         "endOffset": 475
                     }
                 }
@@ -129,6 +142,9 @@
                         "endLine": 9,
                         "endColumn": 12,
                         "endOffset": 475
+=======
+                        "endOffset": 484
+>>>>>>> Badman
                     }
                 }
             }
