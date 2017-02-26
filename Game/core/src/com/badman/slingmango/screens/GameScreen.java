@@ -26,6 +26,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
+import com.badman.slingmango.MainMenu;
+import com.badman.slingmango.SlingName;
 import com.badman.slingmango.data.Fruit;
 import com.badman.slingmango.data.Mango;
 import com.badman.slingmango.main.SlingMango;
@@ -295,7 +297,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new MainMenu(new SlingName()));
             }
         }, 3);
     }
