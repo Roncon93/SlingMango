@@ -210,7 +210,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         Body basketTrigger = world.createBody(bodyDef);
 
         EdgeShape shape3 = new EdgeShape();
-        shape3.set(new Vector2(-20.0f, 1.2f), new Vector2(20.0f, 1.2f));
+        shape3.set(new Vector2(-20.0f, 0.8f), new Vector2(20.0f, 0.8f));
         basketSensor = basketTrigger.createFixture(shape3, 0.0f);
         basketSensor.setSensor(true);
 
@@ -243,7 +243,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 			body.createFixture(shape, 20.0f);*/
 
             Mango mango = new Mango(world);
-            mango.body.setTransform(2.0f + 2.0f * i, 1.0f, 0);
+            mango.body.setTransform(2.0f + 2.0f * i, 0.5f, 0);
 
             fruits.add(mango);
         }
