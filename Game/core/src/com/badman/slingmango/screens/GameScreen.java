@@ -25,6 +25,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.badman.slingmango.data.Fruit;
 import com.badman.slingmango.data.Mango;
 import com.badman.slingmango.main.SlingMango;
@@ -37,15 +38,22 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 public class GameScreen implements Screen, GestureDetector.GestureListener, ContactListener
 {
+    private SlingMango game;
+
     private OrthographicCamera camera;
 
     private Box2DDebugRenderer renderer;
 
+    private SpriteBatch textBatch;
     private SpriteBatch batch;
 
     private BitmapFont font;
 
     private World world;
+
+    private int score;
+    private int lives;
+    private boolean gameOver;
 
     private Array<Fruit> fruits = new Array<Fruit>();
     private Array<Fruit> bgFruits = new Array<Fruit>();
@@ -57,7 +65,9 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
     private Body basketBody;
 
     private Fixture conveyorBelt;
+    private Fixture fallingSensor;
     private Fixture basketSensor;
+    private Fixture shredderSensor;
     private Fixture basketLeftRim;
     private Fixture basketRightRim;
 
@@ -81,7 +91,6 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        font.draw(batch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
 
         basketBackgroundSprite.draw(batch, basketBody);
 
@@ -100,10 +109,26 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         }
 
         batch.end();
+
+        textBatch.begin();
+
+        font.draw(textBatch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
+        font.draw(textBatch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
+        font.draw(textBatch, "Lives:", Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 20);
+
+        for (int i = 0; i < lives; i++)
+            font.draw(textBatch, "X", Gdx.graphics.getWidth() - 60 + 15 * i, Gdx.graphics.getHeight() - 20);
+
+        if (gameOver)
+            font.draw(textBatch, "Game Over!", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+
+        textBatch.end();
     }
 
     public GameScreen(SlingMango game)
     {
+        this.game = game;
+
         // setup the camera. In Box2D we operate on a
         // meter scale, pixels won't do it. So we use
         // an orthographic camera with a viewport of
@@ -124,31 +149,31 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         createWorld(world);
 
         batch = new SpriteBatch();
-        font = new BitmapFont();
+        textBatch = new SpriteBatch();
 
-        //basketBackgroundSprite = new Sprite(new Texture(Gdx.files.internal("basket.png")));
-        //basketBackgroundSprite.setScale(0.5f);
-        //basketBackgroundSprite.setPosition(235, 335);
+        font = new BitmapFont();
 
         mangoSprite = new Sprite(new Texture(Gdx.files.internal("mango.png")));
         mangoSprite.setScale(0.25f);
         mangoSprite.setPosition(235, 335);
 
+        score = 0;
+        lives = 3;
+
         Gdx.input.setInputProcessor(new GestureDetector(this));
     }
 
     @Override
-    public void dispose ()
+    public void dispose()
     {
+        batch.dispose();
         renderer.dispose();
         world.dispose();
 
+        batch = null;
         renderer = null;
         world = null;
     }
-
-    /** another temporary vector **/
-    Vector2 target = new Vector2();
 
     public void pause () {
 
@@ -195,37 +220,55 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         Body body2 = world.createBody(bd2);
 
         PolygonShape shape2 = new PolygonShape();
-        shape.setAsBox(0.025f, 0.025f);
+        shape2.setAsBox(0.025f, 0.025f);
 
         FixtureDef fd2 = new FixtureDef();
-        fd2.shape = shape;
+        fd2.shape = shape2;
         fd2.friction = 0.8f;
         basketLeftRim = body2.createFixture(fd2);
 
         bd2.position.set(0.15f, 0.6f);
         basketRightRim = world.createBody(bd2).createFixture(fd2);
 
-        // Basket Sensor
-        BodyDef bodyDef = new BodyDef();
-        Body basketTrigger = world.createBody(bodyDef);
+        // Falling Sensor
+        BodyDef bd3 = new BodyDef();
+        Body basketTrigger = world.createBody(bd3);
 
         EdgeShape shape3 = new EdgeShape();
         shape3.set(new Vector2(-20.0f, 0.8f), new Vector2(20.0f, 0.8f));
-        basketSensor = basketTrigger.createFixture(shape3, 0.0f);
+        fallingSensor = basketTrigger.createFixture(shape3, 0.0f);
+        fallingSensor.setSensor(true);
+
+        // Basket Sensor
+        BodyDef bd4 = new BodyDef();
+        Body basketTrigger2 = world.createBody(bd4);
+
+        EdgeShape shape4 = new EdgeShape();
+        shape4.set(new Vector2(-0.2f, 0.6f), new Vector2(0.2f, 0.6f));
+        basketSensor = basketTrigger2.createFixture(shape4, 0.0f);
         basketSensor.setSensor(true);
 
         // Hoop Sprite
-        BodyDef bd3 = new BodyDef();
-        bd3.position.set(0f, 0.7f);
-        basketBody = world.createBody(bd3);
+        BodyDef bd5 = new BodyDef();
+        bd5.position.set(0f, 0.7f);
+        basketBody = world.createBody(bd5);
 
-        PolygonShape shape4 = new PolygonShape();
-        shape.setAsBox(0.4f, 0.4f);
+        PolygonShape shape5 = new PolygonShape();
+        shape5.setAsBox(0.4f, 0.4f);
 
         FixtureDef fd3 = new FixtureDef();
-        fd3.shape = shape;
+        fd3.shape = shape5;
         fd3.isSensor = true;
         basketBody.createFixture(fd3);
+
+        // Shredder Sensor
+        BodyDef bd6 = new BodyDef();
+        Body basketTrigger3 = world.createBody(bd6);
+
+        EdgeShape shape6 = new EdgeShape();
+        shape6.set(new Vector2(-20f, -1f), new Vector2(20f, -1f));
+        shredderSensor = basketTrigger3.createFixture(shape6, 0.0f);
+        shredderSensor.setSensor(true);
 
         basketBackgroundSprite = new Box2DSprite(new Texture(Gdx.files.internal("netWhole.png")));
         basketForegroundSprite = new Box2DSprite(new Texture(Gdx.files.internal("netFore.png")));
@@ -233,15 +276,6 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         // Boxes
         for (int i = 0; i < 5; ++i)
         {
-			/*BodyDef bd = new BodyDef();
-			bd.type = BodyType.DynamicBody;
-			bd.position.set(-10.0f + 2.0f * i, 7.0f);
-			Body body = world.createBody(bd);
-
-			PolygonShape shape = new PolygonShape();
-			shape.setAsBox(0.5f, 0.5f);
-			body.createFixture(shape, 20.0f);*/
-
             Mango mango = new Mango(world);
             mango.body.setTransform(2.0f + 2.0f * i, 0.5f, 0);
 
@@ -249,6 +283,24 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         }
     }
 
+    private void showGameOver()
+    {
+        gameOver = true;
+
+        for (Fruit fruit : fruits)
+            fruit.getTexture().dispose();
+
+        fruits.clear();
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                game.setScreen(new GameScreen(game));
+            }
+        }, 3);
+    }
+
+    @Override
     public void preSolve (Contact contact, Manifold oldManifold)
     {
         Fixture fixtureA = contact.getFixtureA();
@@ -272,7 +324,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
                     contact.setEnabled(false);
             }
 
-            contact.setTangentSpeed(-1.0f);
+            contact.setTangentSpeed(-0.5f);
         }
 
         else if (fixtureA == basketLeftRim || fixtureB == basketRightRim
@@ -303,16 +355,52 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
 
-        if (fixtureA == basketSensor)
+        if (fixtureA == fallingSensor)
         {
             Fruit fruit = (Fruit) fixtureB.getBody().getUserData();
             fruit.falling = true;
         }
 
-        else if (fixtureB == basketSensor)
+        else if (fixtureB == fallingSensor)
+        {
+            Fruit fruit = (Fruit) fixtureA.getBody().getUserData();
+            fruit.falling = true;
+        }
+
+        else if (fixtureA == basketSensor)
         {
             Fruit fruit = (Fruit) fixtureB.getBody().getUserData();
-            fruit.falling = true;
+
+            if (fruit.falling)
+                score++;
+        }
+
+        else if (fixtureB == basketSensor)
+        {
+            Fruit fruit = (Fruit) fixtureA.getBody().getUserData();
+
+            if (fruit.falling)
+                score++;
+        }
+
+        else if (fixtureA == shredderSensor)
+        {
+            Fruit fruit = (Fruit) fixtureB.getBody().getUserData();
+            fruit.getTexture().dispose();
+            fruits.removeValue(fruit, false);
+
+            if (--lives <= 0)
+                showGameOver();
+        }
+
+        else if (fixtureB == shredderSensor)
+        {
+            Fruit fruit = (Fruit) fixtureA.getBody().getUserData();
+            fruit.getTexture().dispose();
+            fruits.removeValue(fruit, false);
+
+            if (--lives <= 0)
+                showGameOver();
         }
     }
 
