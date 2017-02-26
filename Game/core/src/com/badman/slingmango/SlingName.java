@@ -1,6 +1,9 @@
 package com.badman.slingmango;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +18,7 @@ public class SlingName extends Game {
 
 		batch = new SpriteBatch();
 		img = new Texture("BadMan.png");
-		this.setScreen(new GameScreen(this));
+		this.setScreen(new SplashScreen(this));
 	}
 
 	@Override
