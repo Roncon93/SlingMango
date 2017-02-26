@@ -48,8 +48,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
     private World world;
 
     private Array<Fruit> fruits = new Array<Fruit>();
+    private Array<Fruit> bgFruits = new Array<Fruit>();
 
-    private Box2DSprite basketSprite;
+    private Box2DSprite basketBackgroundSprite;
+    private Box2DSprite basketForegroundSprite;
     private Sprite mangoSprite;
 
     private Body basketBody;
@@ -80,12 +82,21 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
         batch.begin();
         font.draw(batch, "fps:" + Gdx.graphics.getFramesPerSecond() + ", update: " + updateTime + ", render: " + renderTime, 0, 20);
-        basketSprite.draw(batch, basketBody);
 
-        for (Fruit fruit : fruits) {
-            //mangoSprite.setPosition(fruit.body.getPosition().x, fruit.body.getPosition().y);
-            //mangoSprite.draw(batch);
-            fruit.draw(batch, fruit.body);
+        basketBackgroundSprite.draw(batch, basketBody);
+
+        for (Fruit fruit : fruits)
+        {
+            if (fruit.falling)
+                fruit.draw(batch, fruit.body);
+        }
+
+        basketForegroundSprite.draw(batch, basketBody);
+
+        for (Fruit fruit : fruits)
+        {
+            if (!fruit.falling)
+                fruit.draw(batch, fruit.body);
         }
 
         batch.end();
@@ -115,9 +126,9 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         batch = new SpriteBatch();
         font = new BitmapFont();
 
-        //basketSprite = new Sprite(new Texture(Gdx.files.internal("basket.png")));
-        //basketSprite.setScale(0.5f);
-        //basketSprite.setPosition(235, 335);
+        //basketBackgroundSprite = new Sprite(new Texture(Gdx.files.internal("basket.png")));
+        //basketBackgroundSprite.setScale(0.5f);
+        //basketBackgroundSprite.setPosition(235, 335);
 
         mangoSprite = new Sprite(new Texture(Gdx.files.internal("mango.png")));
         mangoSprite.setScale(0.25f);
@@ -180,7 +191,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
         // Basket Rim
         BodyDef bd2 = new BodyDef();
-        bd2.position.set(-0.12f, 0.8f);
+        bd2.position.set(-0.15f, 0.6f);
         Body body2 = world.createBody(bd2);
 
         PolygonShape shape2 = new PolygonShape();
@@ -191,7 +202,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         fd2.friction = 0.8f;
         basketLeftRim = body2.createFixture(fd2);
 
-        bd2.position.set(0.12f, 0.8f);
+        bd2.position.set(0.15f, 0.6f);
         basketRightRim = world.createBody(bd2).createFixture(fd2);
 
         // Basket Sensor
@@ -209,14 +220,15 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         basketBody = world.createBody(bd3);
 
         PolygonShape shape4 = new PolygonShape();
-        shape.setAsBox(0.15f, 0.15f);
+        shape.setAsBox(0.4f, 0.4f);
 
         FixtureDef fd3 = new FixtureDef();
         fd3.shape = shape;
         fd3.isSensor = true;
         basketBody.createFixture(fd3);
 
-        basketSprite = new Box2DSprite(new Texture(Gdx.files.internal("basket.png")));
+        basketBackgroundSprite = new Box2DSprite(new Texture(Gdx.files.internal("netWhole.png")));
+        basketForegroundSprite = new Box2DSprite(new Texture(Gdx.files.internal("netFore.png")));
 
         // Boxes
         for (int i = 0; i < 5; ++i)
