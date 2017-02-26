@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badman.slingmango.MainMenu;
 import com.badman.slingmango.SlingName;
+import com.badman.slingmango.data.ConveyorBelt;
 import com.badman.slingmango.data.Fruit;
 import com.badman.slingmango.data.Mango;
 
@@ -37,7 +38,7 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
  * Created by roncon on 2/24/17.
  */
 
-public class GameScreen implements Screen, GestureDetector.GestureListener, ContactListener
+public class GameScreen implements Screen, GestureDetector.GestureListener, ContactListener, ConveyorBelt.ConveyorBeltListener
 {
     private SlingName game;
 
@@ -55,9 +56,11 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
     private int score;
     private int lives;
     private boolean gameOver;
+    private float beltSpeed;
+
+    private ConveyorBelt belt;
 
     private Array<Fruit> fruits = new Array<Fruit>();
-    private Array<Fruit> bgFruits = new Array<Fruit>();
 
     private Box2DSprite basketBackgroundSprite;
     private Box2DSprite basketForegroundSprite;
@@ -75,6 +78,8 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
     @Override
     public void render (float delta)
     {
+        belt.update(delta);
+
         // update the world with a fixed time step
         long startTime = TimeUtils.nanoTime();
         world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
@@ -160,6 +165,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
         score = 0;
         lives = 3;
+        beltSpeed = 0.5f;
+
+        belt = new ConveyorBelt();
+        belt.listener = this;
 
         Gdx.input.setInputProcessor(new GestureDetector(this));
     }
@@ -273,15 +282,6 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
 
         basketBackgroundSprite = new Box2DSprite(new Texture(Gdx.files.internal("netWhole.png")));
         basketForegroundSprite = new Box2DSprite(new Texture(Gdx.files.internal("netFore.png")));
-
-        // Boxes
-        for (int i = 0; i < 5; ++i)
-        {
-            Mango mango = new Mango(world);
-            mango.body.setTransform(2.0f + 2.0f * i, 0.5f, 0);
-
-            fruits.add(mango);
-        }
     }
 
     private void showGameOver()
@@ -325,7 +325,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
                     contact.setEnabled(false);
             }
 
-            contact.setTangentSpeed(-0.5f);
+            contact.setTangentSpeed(-beltSpeed);
         }
 
         else if (fixtureA == basketLeftRim || fixtureB == basketRightRim
@@ -503,5 +503,24 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
     @Override
     public void pinchStop() {
 
+    }
+
+    @Override
+    public void spawnFruit(boolean spawnMango)
+    {
+        System.out.println(spawnMango);
+
+        if (spawnMango)
+        {
+            Mango mango = new Mango(world);
+            mango.body.setTransform(2.0f, 0.5f, 0);
+
+            fruits.add(mango);
+        }
+    }
+
+    @Override
+    public void increaseSpeed() {
+        beltSpeed += 0.1f;
     }
 }
