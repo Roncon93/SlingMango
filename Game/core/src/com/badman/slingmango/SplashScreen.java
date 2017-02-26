@@ -31,9 +31,9 @@ public class SplashScreen implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        slingName.batch.begin();
-        slingName.batch.draw(slingName.img, 0, 0,Gdx.app.getGraphics().getWidth(),Gdx.app.getGraphics().getHeight());
-        slingName.batch.end();
+      //  slingName.batch.begin();
+      //  slingName.batch.draw(slingName.img, 0, 0,Gdx.app.getGraphics().getWidth(),Gdx.app.getGraphics().getHeight());
+      //  slingName.batch.end();
 
         boolean timerIsOn = false;
         if(!timerIsOn) {
@@ -48,7 +48,7 @@ public class SplashScreen implements Screen {
                     dispose();
                 }
 
-            }, 3);
+            }, 6);
         }
 
     }

@@ -61,7 +61,7 @@ public class MainMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.print("Thiss");
                 slingName.setScreen(new GameScreen(slingName));
-                //dispose();
+                dispose();
             }
         });
 
