@@ -1,5 +1,6 @@
 [
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\roncon\\Documents\\Github\\SlingMango\\Game\\android\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
         "source": "C:\\Users\\roncon\\Documents\\Github\\SlingMango\\Game\\android\\res\\drawable-hdpi\\ic_launcher.png"
     },
@@ -10,5 +11,9 @@
     {
         "merged": "C:\\Users\\roncon\\Documents\\Github\\SlingMango\\android\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
         "source": "C:\\Users\\roncon\\Documents\\Github\\SlingMango\\android\\res\\drawable-hdpi\\ic_launcher.png"
+=======
+        "merged": "C:\\Users\\kaija\\OneDrive\\Documents\\GitHub\\SlingMango\\Game\\android\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
+        "source": "C:\\Users\\kaija\\OneDrive\\Documents\\GitHub\\SlingMango\\Game\\android\\res\\drawable-hdpi\\ic_launcher.png"
+>>>>>>> Badman
     }
 ]
