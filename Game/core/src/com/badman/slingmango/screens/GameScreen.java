@@ -57,6 +57,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
     private int lives;
     private boolean gameOver;
     private float beltSpeed;
+    private int mangoCounter;
 
     private ConveyorBelt belt;
 
@@ -166,6 +167,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         score = 0;
         lives = 3;
         beltSpeed = 0.5f;
+        mangoCounter = 0;
 
         belt = new ConveyorBelt();
         belt.listener = this;
@@ -376,6 +378,14 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             {
                 fruit.scored = true;
                 score++;
+
+                if (++mangoCounter >= 3)
+                {
+                    mangoCounter = 0;
+
+                    if (lives < 3)
+                        lives++;
+                }
             }
         }
 
@@ -387,6 +397,14 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             {
                 fruit.scored = true;
                 score++;
+
+                if (++mangoCounter >= 3)
+                {
+                    mangoCounter = 0;
+
+                    if (lives < 3)
+                        lives++;
+                }
             }
         }
 
@@ -396,7 +414,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             fruit.getTexture().dispose();
             fruits.removeValue(fruit, false);
 
-            if (!fruit.scored) {
+            if (!fruit.scored)
+            {
+                mangoCounter = 0;
+
                 if (--lives <= 0)
                     showGameOver();
             }
@@ -408,7 +429,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             fruit.getTexture().dispose();
             fruits.removeValue(fruit, false);
 
-            if (!fruit.scored) {
+            if (!fruit.scored)
+            {
+                mangoCounter = 0;
+
                 if (--lives <= 0)
                     showGameOver();
             }
@@ -508,8 +532,6 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
     @Override
     public void spawnFruit(boolean spawnMango)
     {
-        System.out.println(spawnMango);
-
         if (spawnMango)
         {
             Mango mango = new Mango(world);
