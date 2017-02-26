@@ -25,6 +25,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badman.slingmango.SlingName;
 import com.badman.slingmango.data.Fruit;
 import com.badman.slingmango.data.Mango;
 import com.badman.slingmango.main.SlingMango;
@@ -102,7 +103,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         batch.end();
     }
 
-    public GameScreen(SlingMango game)
+    public GameScreen(SlingName game)
     {
         // setup the camera. In Box2D we operate on a
         // meter scale, pixels won't do it. So we use
