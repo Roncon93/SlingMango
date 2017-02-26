@@ -25,8 +25,11 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+<<<<<<< HEAD
 import com.badlogic.gdx.utils.Timer;
 import com.badman.slingmango.MainMenu;
+=======
+>>>>>>> Badman
 import com.badman.slingmango.SlingName;
 import com.badman.slingmango.data.Fruit;
 import com.badman.slingmango.data.Mango;
@@ -127,7 +130,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         textBatch.end();
     }
 
-    public GameScreen(SlingMango game)
+    public GameScreen(SlingName game)
     {
         this.game = game;
 

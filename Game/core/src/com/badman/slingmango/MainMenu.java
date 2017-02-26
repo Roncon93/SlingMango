@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badman.slingmango.screens.GameScreen;
 
 import java.awt.Label;
 
@@ -59,7 +60,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.print("Thiss");
-                slingName.setScreen(new SlingGame(slingName));
+                slingName.setScreen(new GameScreen(slingName));
                 //dispose();
             }
         });

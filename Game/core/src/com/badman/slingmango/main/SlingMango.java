@@ -14,24 +14,24 @@ public class SlingMango extends Game
 	@Override
 	public void create()
 	{
-		Box2D.init();
+		//Box2D.init();
 
-		batch = new SpriteBatch();
+		//batch = new SpriteBatch();
 		//Use LibGDX's default Arial font.
-		font = new BitmapFont();
+		//font = new BitmapFont();
 
-		setScreen(new GameScreen(this));
+		//setScreen(new GameScreen(this));
 	}
 
 	@Override
 	public void render() {
-		super.render(); //important!
+	//	super.render(); //important!
 	}
 
 	@Override
 	public void dispose()
 	{
-		batch.dispose();
-		font.dispose();
+	//	batch.dispose();
+	//	font.dispose();
 	}
 }
