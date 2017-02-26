@@ -17,7 +17,7 @@ public class ConveyorBelt extends Box2DSprite
 
     public ConveyorBeltListener listener;
 
-    private float timer = MathUtils.random(5);
+    private float timer = MathUtils.random(2);
 
     private float difficultyModifier = 0;
 

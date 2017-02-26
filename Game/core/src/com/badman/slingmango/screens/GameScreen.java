@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -30,7 +31,6 @@ import com.badman.slingmango.MainMenu;
 import com.badman.slingmango.SlingName;
 import com.badman.slingmango.data.ConveyorBelt;
 import com.badman.slingmango.data.Fruit;
-import com.badman.slingmango.data.Mango;
 
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -374,38 +374,14 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
         {
             Fruit fruit = (Fruit) fixtureB.getBody().getUserData();
 
-            if (fruit.falling)
-            {
-                fruit.scored = true;
-                score++;
-
-                if (++mangoCounter >= 3)
-                {
-                    mangoCounter = 0;
-
-                    if (lives < 3)
-                        lives++;
-                }
-            }
+            fruitMade(fruit);
         }
 
         else if (fixtureB == basketSensor)
         {
             Fruit fruit = (Fruit) fixtureA.getBody().getUserData();
 
-            if (fruit.falling)
-            {
-                fruit.scored = true;
-                score++;
-
-                if (++mangoCounter >= 3)
-                {
-                    mangoCounter = 0;
-
-                    if (lives < 3)
-                        lives++;
-                }
-            }
+            fruitMade(fruit);
         }
 
         else if (fixtureA == shredderSensor)
@@ -414,12 +390,11 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             fruit.getTexture().dispose();
             fruits.removeValue(fruit, false);
 
-            if (!fruit.scored)
+            if (fruit.isMango && !fruit.scored)
             {
                 mangoCounter = 0;
 
-                if (--lives <= 0)
-                    showGameOver();
+                decreaseLives();
             }
         }
 
@@ -429,12 +404,11 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
             fruit.getTexture().dispose();
             fruits.removeValue(fruit, false);
 
-            if (!fruit.scored)
+            if (fruit.isMango && !fruit.scored)
             {
                 mangoCounter = 0;
 
-                if (--lives <= 0)
-                    showGameOver();
+                decreaseLives();
             }
         }
     }
@@ -532,17 +506,65 @@ public class GameScreen implements Screen, GestureDetector.GestureListener, Cont
     @Override
     public void spawnFruit(boolean spawnMango)
     {
-        if (spawnMango)
-        {
-            Mango mango = new Mango(world);
-            mango.body.setTransform(2.0f, 0.5f, 0);
+        String fruitType;
 
-            fruits.add(mango);
+        if (spawnMango)
+            fruitType = "mango";
+
+        else
+        {
+            int fruit = MathUtils.random(2);
+
+            if (fruit == 0)
+                fruitType = "apple";
+
+            else if (fruit == 0)
+                fruitType = "orange";
+
+            else
+                fruitType = "pear";
+
         }
+
+        Fruit fruit = new Fruit(new Texture(Gdx.files.internal(fruitType + ".png")), world);
+        fruit.body.setTransform(2.0f, 0.5f, 0);
+        fruit.isMango = spawnMango;
+
+        fruits.add(fruit);
     }
 
     @Override
     public void increaseSpeed() {
         beltSpeed += 0.1f;
+    }
+
+    private void decreaseLives()
+    {
+        if (--lives <= 0)
+            showGameOver();
+    }
+
+    private void fruitMade(Fruit fruit)
+    {
+        if (fruit.falling)
+        {
+            if (fruit.isMango)
+            {
+                fruit.scored = true;
+                score++;
+
+                if (++mangoCounter >= 3)
+                {
+                    mangoCounter = 0;
+
+                    if (lives < 3)
+                        lives++;
+                }
+            }
+
+            else {
+                decreaseLives();
+            }
+        }
     }
 }
